@@ -1,7 +1,8 @@
 from ultralytics import YOLO
 
 
-MODEL = "runs/detect/runs/road_sign_baseline/weights/best.pt"
+# MODEL = "runs/detect/runs/road_sign_baseline/weights/best.pt"
+MODEL = "runs/detect/runs/road_sign_baseline-4/weights/best.pt"
 DATA = "dataset/data.yaml"
 
 
