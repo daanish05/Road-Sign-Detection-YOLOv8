@@ -12,7 +12,7 @@ print("\nRunning predictions on validation images...\n")
 results = model.predict(
     source=SOURCE,
     imgsz=640,
-    conf=0.10,
+    conf=0.01,
     iou=0.7,
     device=0,
 
