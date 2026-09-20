@@ -65,7 +65,9 @@ runs/**/
 
 models/
 results/predictions/
+results
 results/outputs/
+
 
 # Detection videos
 *.mp4
