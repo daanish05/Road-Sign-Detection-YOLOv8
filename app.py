@@ -1,6 +1,7 @@
 from pathlib import Path
 import time
 import cv2
+import torch
 
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
@@ -28,7 +29,7 @@ ALLOWED_EXTENSIONS = {
 
 CONFIDENCE = 0.25
 IMAGE_SIZE = 640
-DEVICE = 0
+DEVICE = 0 if torch.cuda.is_available() else "cpu"
 
 
 # ============================================================
