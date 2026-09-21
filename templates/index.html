@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Road Sign Detection</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #0f172a,
+                    #1e293b
+                );
+
+            color: #0f172a;
+
+            padding: 30px 15px;
+        }
+
+
+        /* ================================================
+           MAIN CONTAINER
+        ================================================= */
+
+        .container {
+
+            width: 100%;
+            max-width: 1100px;
+
+            margin: auto;
+        }
+
+
+        /* ================================================
+           HEADER
+        ================================================= */
+
+        .header {
+
+            text-align: center;
+
+            color: white;
+
+            margin-bottom: 25px;
+        }
+
+
+        .header h1 {
+
+            font-size: 36px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .header p {
+
+            color: #cbd5e1;
+
+            font-size: 16px;
+        }
+
+
+        .badge {
+
+            display: inline-block;
+
+            margin-top: 12px;
+
+            padding: 7px 14px;
+
+            background: #334155;
+
+            color: #e2e8f0;
+
+            border-radius: 20px;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================================
+           CARD
+        ================================================= */
+
+        .card {
+
+            background: white;
+
+            border-radius: 18px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 20px 50px
+                rgba(0, 0, 0, 0.25);
+        }
+
+
+        /* ================================================
+           UPLOAD
+        ================================================= */
+
+        .upload-box {
+
+            border: 2px dashed #cbd5e1;
+
+            border-radius: 14px;
+
+            padding: 40px 20px;
+
+            text-align: center;
+
+            transition: 0.2s;
+        }
+
+
+        .upload-box:hover {
+
+            border-color: #2563eb;
+
+            background: #f8fafc;
+        }
+
+
+        .camera {
+
+            font-size: 45px;
+
+            margin-bottom: 12px;
+        }
+
+
+        .upload-box h2 {
+
+            margin-bottom: 8px;
+        }
+
+
+        .upload-box p {
+
+            color: #64748b;
+
+            margin-bottom: 20px;
+        }
+
+
+        input[type="file"] {
+
+            display: none;
+        }
+
+
+        .choose-button {
+
+            display: inline-block;
+
+            padding: 11px 22px;
+
+            background: #e2e8f0;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+        }
+
+
+        .choose-button:hover {
+
+            background: #cbd5e1;
+        }
+
+
+        .file-name {
+
+            margin-top: 12px;
+
+            color: #475569;
+
+            font-size: 14px;
+        }
+
+
+        .detect-button {
+
+            margin-top: 20px;
+
+            padding: 13px 28px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: #2563eb;
+
+            color: white;
+
+            font-size: 16px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+
+        .detect-button:hover {
+
+            background: #1d4ed8;
+        }
+
+
+        .detect-button:disabled {
+
+            opacity: 0.6;
+
+            cursor: not-allowed;
+        }
+
+
+        /* ================================================
+           ERROR
+        ================================================= */
+
+        .error {
+
+            margin-top: 20px;
+
+            padding: 14px;
+
+            border-radius: 8px;
+
+            background: #fee2e2;
+
+            color: #991b1b;
+
+            text-align: center;
+        }
+
+
+        /* ================================================
+           RESULTS
+        ================================================= */
+
+        .results {
+
+            margin-top: 30px;
+        }
+
+
+        .results-title {
+
+            font-size: 25px;
+
+            margin-bottom: 18px;
+        }
+
+
+        .result-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.5fr)
+                minmax(300px, 0.8fr);
+
+            gap: 22px;
+        }
+
+
+        /* ================================================
+           RESULT IMAGE
+        ================================================= */
+
+        .image-card {
+
+            background: #f1f5f9;
+
+            border-radius: 12px;
+
+            padding: 15px;
+
+            text-align: center;
+        }
+
+
+        .image-card img {
+
+            display: block;
+
+            width: 100%;
+
+            max-height: 550px;
+
+            object-fit: contain;
+
+            border-radius: 8px;
+        }
+
+
+        /* ================================================
+           STAT CARDS
+        ================================================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .stat {
+
+            padding: 15px;
+
+            border-radius: 10px;
+
+            background: #f1f5f9;
+        }
+
+
+        .stat-label {
+
+            font-size: 12px;
+
+            color: #64748b;
+
+            margin-bottom: 5px;
+        }
+
+
+        .stat-value {
+
+            font-size: 21px;
+
+            font-weight: 700;
+        }
+
+
+        /* ================================================
+           PREDICTIONS
+        ================================================= */
+
+        .prediction-title {
+
+            margin-bottom: 12px;
+        }
+
+
+        .prediction {
+
+            padding: 13px 14px;
+
+            margin-bottom: 9px;
+
+            border: 1px solid #e2e8f0;
+
+            border-radius: 9px;
+
+            background: #f8fafc;
+        }
+
+
+        .prediction-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 10px;
+        }
+
+
+        .class-name {
+
+            font-weight: 700;
+        }
+
+
+        .confidence {
+
+            color: #2563eb;
+
+            font-weight: 700;
+
+            white-space: nowrap;
+        }
+
+
+        .class-id {
+
+            margin-top: 4px;
+
+            font-size: 12px;
+
+            color: #64748b;
+        }
+
+
+        /* ================================================
+           NO DETECTION
+        ================================================= */
+
+        .no-detection {
+
+            padding: 18px;
+
+            border-radius: 10px;
+
+            background: #fff7ed;
+
+            color: #9a3412;
+
+            line-height: 1.5;
+        }
+
+
+        /* ================================================
+           NOTE
+        ================================================= */
+
+        .note {
+
+            margin-top: 15px;
+
+            padding: 12px;
+
+            background: #f8fafc;
+
+            border-radius: 8px;
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            line-height: 1.5;
+        }
+
+
+        /* ================================================
+           NEW IMAGE
+        ================================================= */
+
+        .new-image {
+
+            display: inline-block;
+
+            margin-top: 20px;
+
+            padding: 11px 20px;
+
+            border-radius: 8px;
+
+            background: #0f172a;
+
+            color: white;
+
+            text-decoration: none;
+
+            font-weight: 600;
+        }
+
+
+        .new-image:hover {
+
+            background: #1e293b;
+        }
+
+
+        /* ================================================
+           FOOTER
+        ================================================= */
+
+        .footer {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+
+        /* ================================================
+           RESPONSIVE
+        ================================================= */
+
+        @media (max-width: 800px) {
+
+            .header h1 {
+
+                font-size: 28px;
+            }
+
+            .card {
+
+                padding: 18px;
+            }
+
+            .result-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- ================================================
+         HEADER
+    ================================================= -->
+
+    <div class="header">
+
+        <h1>
+            🚦 Road Sign Detection
+        </h1>
+
+        <p>
+            Traffic sign detection using YOLOv8
+        </p>
+
+        <div class="badge">
+            YOLOv8s • 640×640 • 264 Classes
+        </div>
+
+    </div>
+
+
+    <!-- ================================================
+         CARD
+    ================================================= -->
+
+    <div class="card">
+
+
+        <!-- ============================================
+             UPLOAD
+        ============================================= -->
+
+        <form
+            method="POST"
+            enctype="multipart/form-data"
+            id="upload-form"
+        >
+
+            <div class="upload-box">
+
+                <div class="camera">
+                    📷
+                </div>
+
+                <h2>
+                    Upload a Road Sign Image
+                </h2>
+
+                <p>
+                    JPG, JPEG, PNG, WEBP or BMP
+                </p>
+
+
+                <label
+                    for="image"
+                    class="choose-button"
+                >
+                    Choose Image
+                </label>
+
+
+                <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    required
+                >
+
+
+                <div
+                    id="file-name"
+                    class="file-name"
+                >
+                    No image selected
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="detect-button"
+                    id="detect-button"
+                >
+                    Detect Road Signs
+                </button>
+
+            </div>
+
+        </form>
+
+
+        <!-- ============================================
+             ERROR
+        ============================================= -->
+
+        {% if error %}
+
+        <div class="error">
+
+            {{ error }}
+
+        </div>
+
+        {% endif %}
+
+
+        <!-- ============================================
+             RESULTS
+        ============================================= -->
+
+        {% if result_image %}
+
+        <div class="results">
+
+
+            <h2 class="results-title">
+                Detection Results
+            </h2>
+
+
+            <div class="result-grid">
+
+
+                <!-- ====================================
+                     IMAGE
+                ===================================== -->
+
+                <div class="image-card">
+
+                    <img
+                        src="{{ url_for(
+                            'static',
+                            filename=result_image
+                        ) }}"
+                        alt="Annotated detection result"
+                    >
+
+                </div>
+
+
+                <!-- ====================================
+                     INFORMATION
+                ===================================== -->
+
+                <div>
+
+
+                    <!-- STATS -->
+
+                    <div class="stats">
+
+
+                        <div class="stat">
+
+                            <div class="stat-label">
+                                Predictions
+                            </div>
+
+                            <div class="stat-value">
+                                {{ detections|length }}
+                            </div>
+
+                        </div>
+
+
+                        <div class="stat">
+
+                            <div class="stat-label">
+                                Processing Time
+                            </div>
+
+                            <div class="stat-value">
+                                {{ inference_time }} ms
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+
+                    <!-- PREDICTIONS -->
+
+                    <h3 class="prediction-title">
+                        Model Predictions
+                    </h3>
+
+
+                    {% if detections %}
+
+
+                        {% for detection in detections %}
+
+                        <div class="prediction">
+
+
+                            <div class="prediction-top">
+
+                                <span class="class-name">
+
+                                    {{ detection.class_name }}
+
+                                </span>
+
+
+                                <span class="confidence">
+
+                                    {{ detection.confidence }}%
+
+                                </span>
+
+                            </div>
+
+
+                            <div class="class-id">
+
+                                Class ID:
+                                {{ detection.class_id }}
+
+                            </div>
+
+
+                        </div>
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+                        <div class="no-detection">
+
+                            <strong>
+                                No road signs detected.
+                            </strong>
+
+                            <br>
+
+                            No prediction exceeded the
+                            {{ 25 }}% confidence threshold.
+
+                        </div>
+
+                    {% endif %}
+
+
+                    <!-- NOTE -->
+
+                    <div class="note">
+
+                        <strong>Note:</strong>
+
+                        The confidence score represents
+                        the model's prediction confidence.
+                        It does not guarantee that the
+                        predicted class is correct.
+
+                    </div>
+
+
+                    <!-- NEW IMAGE -->
+
+                    <a
+                        href="/"
+                        class="new-image"
+                    >
+                        ← Analyze Another Image
+                    </a>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+    <div class="footer">
+
+        Road Sign Detection Using YOLOv8
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    const imageInput =
+        document.getElementById("image");
+
+    const fileName =
+        document.getElementById("file-name");
+
+    const form =
+        document.getElementById("upload-form");
+
+    const detectButton =
+        document.getElementById("detect-button");
+
+
+    imageInput.addEventListener(
+        "change",
+        function () {
+
+            if (this.files.length > 0) {
+
+                fileName.textContent =
+                    this.files[0].name;
+
+            } else {
+
+                fileName.textContent =
+                    "No image selected";
+            }
+
+        }
+    );
+
+
+    form.addEventListener(
+        "submit",
+        function () {
+
+            detectButton.disabled = true;
+
+            detectButton.textContent =
+                "Detecting... Please wait";
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,42 +1,122 @@
 # ============================================================
-# Python
+# Road Sign Detection Using YOLOv8
+# Git Ignore
 # ============================================================
+
+
+# ------------------------------------------------------------
+# Python
+# ------------------------------------------------------------
 
 __pycache__/
 *.py[cod]
 *$py.class
 
-# Virtual environment
-venv/
-.venv/
-env/
-ENV/
+*.so
+.Python
 
-# Python packaging
-*.egg-info/
-dist/
 build/
+develop-eggs/
+dist/
+downloads/
+eggs/
 .eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
 
-# ============================================================
-# Jupyter
-# ============================================================
+# ------------------------------------------------------------
+# Virtual Environment
+# ------------------------------------------------------------
+
+venv/
+env/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+
+# ------------------------------------------------------------
+# Environment / Secrets
+# ------------------------------------------------------------
+
+.env
+.env.*
+!.env.example
+
+*.pem
+*.key
+secrets.json
+
+
+# ------------------------------------------------------------
+# IDE / Editors
+# ------------------------------------------------------------
+
+.vscode/
+.idea/
+*.code-workspace
+
+# VS Code local history
+.history/
+
+
+# ------------------------------------------------------------
+# Jupyter Notebook
+# ------------------------------------------------------------
 
 .ipynb_checkpoints/
 
 
-# ============================================================
-# Dataset
-# ============================================================
+# ------------------------------------------------------------
+# YOLO / Ultralytics Training Outputs
+# ------------------------------------------------------------
 
-# Do NOT upload the actual dataset
-dataset/stratified/
+runs/
+runs/**
+
+# Training checkpoints
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Keep final trained model
+!models/
+!models/best.pt
+
+# TensorBoard
+runs/**/events.out.tfevents.*
+
+
+# ------------------------------------------------------------
+# Dataset
+# ------------------------------------------------------------
+
+# Ignore the complete dataset
 dataset/train/
 dataset/valid/
 dataset/test/
 
-# Dataset archives
+# Ignore stratified dataset
+dataset/stratified/
+
+# Ignore compressed datasets
+dataset/*.zip
+dataset/**/*.zip
+
+# Ignore downloaded dataset archives
 *.zip
 *.7z
 *.rar
@@ -44,90 +124,115 @@ dataset/test/
 *.tar.gz
 
 
-# ============================================================
-# YOLO / Ultralytics
-# ============================================================
+# ------------------------------------------------------------
+# Flask Runtime Files
+# ------------------------------------------------------------
 
-runs/
-runs/**/
+# Uploaded images
+static/uploads/*
+!static/uploads/.gitkeep
 
-# Trained model weights
-*.pt
-*.pth
-*.onnx
-*.engine
-*.torchscript
+# Generated prediction images
+static/results/*
+!static/results/.gitkeep
 
-
-# ============================================================
-# Model / experiment outputs
-# ============================================================
-
-models/
-results/predictions/
-results
-results/outputs/
-
-
-# Detection videos
-*.mp4
-*.avi
-*.mov
-*.mkv
-*.webm
-
-
-# ============================================================
-# Logs
-# ============================================================
-
+# Flask / temporary files
+instance/
 *.log
 
-# TensorBoard
-tensorboard/
-logs/
+
+# ------------------------------------------------------------
+# Generated Results / Temporary Analysis Files
+# ------------------------------------------------------------
+
+results/*
+!results/.gitkeep
+
+# Prediction outputs
+predictions/
+prediction/
+outputs/
+output/
+
+# Generated CSV / JSON analysis files
+*.csv
+*.json
+
+# If you want to keep a specific JSON file, whitelist it:
+# !path/to/file.json
 
 
-# ============================================================
-# OS files
-# ============================================================
+# ------------------------------------------------------------
+# Python / Model Cache
+# ------------------------------------------------------------
+
+.cache/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Ultralytics cache
+*.cache
+
+
+# ------------------------------------------------------------
+# Operating System Files
+# ------------------------------------------------------------
 
 # Windows
 Thumbs.db
+Thumbs.db:encryptable
 ehthumbs.db
+ehthumbs_vista.db
 Desktop.ini
 
 # macOS
 .DS_Store
+.AppleDouble
+.LSOverride
 
 # Linux
 *~
+.directory
 
 
-# ============================================================
-# IDE
-# ============================================================
-
-.vscode/
-.idea/
-
-# VS Code local history
-.history/
-
-
-# ============================================================
-# Environment / secrets
-# ============================================================
-
-.env
-.env.*
-!.env.example
-
-
-# ============================================================
-# Temporary files
-# ============================================================
+# ------------------------------------------------------------
+# Temporary Files
+# ------------------------------------------------------------
 
 *.tmp
 *.temp
-*.cache
+*.bak
+*.swp
+*.swo
+
+*.orig
+*.rej
+
+
+# ------------------------------------------------------------
+# Logs
+# ------------------------------------------------------------
+
+*.log
+logs/
+
+
+# ------------------------------------------------------------
+# Coverage / Testing
+# ------------------------------------------------------------
+
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+
+# ------------------------------------------------------------
+# OS / Development Tools
+# ------------------------------------------------------------
+
+*.pid
+*.seed

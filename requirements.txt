@@ -1,0 +1,7 @@
+ultralytics==8.4.155
+Flask
+Werkzeug
+opencv-python
+Pillow
+PyYAML
+numpy
